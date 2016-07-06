@@ -10,7 +10,7 @@ export default class CloudinaryLite  extends Component {
    * @param {object} transformations - optional it can be width, height, crop, gravity and aspectRatio
    * @returns {string} 
    */
-  createCloudinaryUrl (requiredInfo, transformations) {
+  createCloudinaryUrl (requiredInfo, transformations, options) {
     let {protocol, cloudName, resourceType, type, publicId} = requiredInfo
 
     // base url with required data
@@ -53,24 +53,33 @@ export default class CloudinaryLite  extends Component {
     }
       
     // add resource public_id and format and version if exist
-    finalUrl = finalUrl + '/' + (options.version ? 'v' + options.version + '/' : '') + publicId + (option.format ? '.' + options.format : '')
+    finalUrl = finalUrl + '/' + (options.version ? 'v' + options.version + '/' : '') + publicId + (options.format ? '.' + options.format : '')
     return finalUrl
   }
   
   render() {
-    let { transformations, publicId, format } = this.props;
-    const {src, resourceType, type, version, cloudName = this.context.cloudName } = this.props;
+    let { transformations, publicId, format, src, resourceType, type, version } = this.props;
+    const {cloudName = this.context.cloudName } = this.props;
 
     if ((src || publicId) && resourceType && type && version && cloudName) {
+      // filter, and clear component props to inherit the others
       const finalProps = blacklist(this.props, 'transformations', 'secure', 'publicId', 'cloudName', 'resourceType', 'type', 'version', 'format', 'src')
+
+      // if prop src is defined, extract and override resource public_id and format
       if (src) {
         let resourceNameAndExtension = src.split('.')
         publicId = resourceNameAndExtension[0]
-        transformations = {...this.props.transformations, format: resourceNameAndExtension[1]}
+        format = resourceNameAndExtension[1]
       }
-      const protocol = this.props.secure ? 'https' : 'http'
-      const requiredCloudinaryUrlInfo = {protocol, cloudName, resourceType, type, publicId}
-      const url = this.createCloudinaryUrl(requiredCloudinaryUrlInfo, transformations)
+
+      let protocol = this.props.secure ? 'https' : 'http'
+      // for default (https, context.CloudName, image, upload, props.publicId)
+      let requiredCloudinaryUrlInfo = {protocol, cloudName, resourceType, type, publicId}
+      
+      // optional info to cloudinary url resource
+      let options = {version, format}
+      
+      const url = this.createCloudinaryUrl(requiredCloudinaryUrlInfo, transformations, options)
       const resourceTag = resourceType == 'image' ? 'img' : 'video'
       
       return <resourceTag src={url} {...finalProps} />;
