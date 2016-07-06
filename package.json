@@ -2,8 +2,9 @@
   "name": "react-cloudinary-lite",
   "version": "0.1.0",
   "description": "A simple and lightweight React component for cloudinary resources",
-  "main": "lib/index.js",
+  "main": "index.js",
   "scripts": {
+    "build": "babel src/index.js --out-file index.js",
     "test": "jest"
   },
   "repository": {
@@ -26,7 +27,10 @@
   },
   "homepage": "https://github.com/4yopping/react-cloudinary-lite#readme",
   "devDependencies": {
-    "babel": "^6.5.2"
+    "babel": "^6.5.2",
+    "babel-cli": "^6.10.1",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.11.1"
   },
   "dependencies": {
     "blacklist": "^1.1.2",
