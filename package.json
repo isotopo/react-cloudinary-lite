@@ -2,9 +2,9 @@
   "name": "react-cloudinary-lite",
   "version": "0.1.0",
   "description": "A simple and lightweight React component for cloudinary resources",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "build": "babel src/index.js --out-file index.js",
+    "build": "babel src --out-dir lib",
     "test": "jest"
   },
   "repository": {
