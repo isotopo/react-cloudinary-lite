@@ -58,11 +58,16 @@ export default class CloudinaryLite  extends Component {
   }
   
   render() {
-    let { transformations, format } = this.props;
-    const { publicId, resourceType, type, version, cloudName = this.context.cloudName } = this.props;
+    let { transformations, publicId, format } = this.props;
+    const {src, resourceType, type, version, cloudName = this.context.cloudName } = this.props;
 
-    if (publicId && resourceType && type && version && cloudName) {
-      const finalProps = blacklist(this.props, 'transformations', 'secure', 'publicId', 'cloudName', 'resourceType', 'type', 'version', 'format')
+    if ((src || publicId) && resourceType && type && version && cloudName) {
+      const finalProps = blacklist(this.props, 'transformations', 'secure', 'publicId', 'cloudName', 'resourceType', 'type', 'version', 'format', 'src')
+      if (src) {
+        let resourceNameAndExtension = src.split('.')
+        publicId = resourceNameAndExtension[0]
+        transformations = {...this.props.transformations, format: resourceNameAndExtension[1]}
+      }
       const protocol = this.props.secure ? 'https' : 'http'
       const requiredCloudinaryUrlInfo = {protocol, cloudName, resourceType, type, publicId}
       const url = this.createCloudinaryUrl(requiredCloudinaryUrlInfo, transformations)
@@ -77,7 +82,8 @@ export default class CloudinaryLite  extends Component {
 }
 
 CloudinaryLite.propTypes = {
-  publicId: PropTypes.string.isRequired,
+  src: PropTypes.string,
+  publicId: PropTypes.string,
   resourceType: PropTypes.oneOf(['image', 'raw', 'video']),
   type: PropTypes.oneOf(['upload', 'private', 'authenticated']),
   version: PropTypes.number, 
