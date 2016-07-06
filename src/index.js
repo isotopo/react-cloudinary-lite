@@ -25,7 +25,7 @@ export default class CloudinaryLite  extends Component {
         case 'width':
           transformationsEncoded.push('w_' + transformations[option])
           break;
-        case 'heigth':
+        case 'height':
           transformationsEncoded.push('h_' + transformations[option])
           break;
         case 'crop':
@@ -46,10 +46,9 @@ export default class CloudinaryLite  extends Component {
           transformationsEncoded.push('ar_' + transformations[option])
           break;
         }
-
-        // finalally add new path and transform all transformations in string with commas in each transformation encoded
-        finalUrl + '/' + transformationsEncoded.join()
       }
+      // finalally add new path and transform all transformations in string with commas in each transformation encoded
+      finalUrl = finalUrl + '/' + transformationsEncoded.join()
     }
       
     // add resource public_id and format and version if exist
@@ -61,9 +60,9 @@ export default class CloudinaryLite  extends Component {
     let { transformations, publicId, format, src, resourceType, type, version } = this.props;
     const {cloudName = this.context.cloudName } = this.props;
 
-    if ((src || publicId) && resourceType && type && version && cloudName) {
+    if ((src || publicId) && resourceType && type  && cloudName) {
       // filter, and clear component props to inherit the others
-      const finalProps = blacklist(this.props, 'transformations', 'secure', 'publicId', 'cloudName', 'resourceType', 'type', 'version', 'format', 'src')
+      let finalProps = blacklist(this.props, 'transformations', 'secure', 'publicId', 'cloudName', 'resourceType', 'type', 'version', 'format', 'src')
 
       // if prop src is defined, extract and override resource public_id and format
       if (src) {
