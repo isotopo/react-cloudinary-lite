@@ -35,7 +35,7 @@ export default class CloudinaryLite  extends Component {
             let cropsEncoded = crops.map((crop) => {
               return 'c_' + crop
             })
-            transformationsEncoded.concat(cropsEncoded)
+            transformationsEncoded = transformationsEncoded.concat(cropsEncoded)
           } else 
             transformationsEncoded.push('c_' + transformations[option])
           break;
@@ -79,9 +79,9 @@ export default class CloudinaryLite  extends Component {
       let options = {version, format}
       
       const url = this.createCloudinaryUrl(requiredCloudinaryUrlInfo, transformations, options)
-      const resourceTag = resourceType == 'image' ? 'img' : 'video'
+      const ResourceTag = resourceType == 'image' ? "img" : "video"
       
-      return <resourceTag src={url} {...finalProps} />;
+      return <ResourceTag src={url} {...finalProps} />;
       
     }
 
