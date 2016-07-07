@@ -2,8 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import blacklist from 'blacklist'
 
 export default class CloudinaryLite  extends Component {
-
-  
+  static SUPPORTED_VIDEO_FORMATS = ['mp4', 'webm', 'ogg']
   /**
    * simple function to create utl string to fetch a resource from cloudinary followoing cloudinary docs
    * @param {object} requiredInfo - required info for fetch resource, it is protocol, cloudName, resourceType, type, publickId
@@ -69,6 +68,7 @@ export default class CloudinaryLite  extends Component {
         let resourceNameAndExtension = src.split('.')
         publicId = resourceNameAndExtension[0]
         format = resourceNameAndExtension[1]
+        resourceType = (CloudinaryLite.SUPPORTED_VIDEO_FORMATS.indexOf(format.toLowerCase()) > -1) ? 'video' : 'image'
       }
 
       let protocol = this.props.secure ? 'https' : 'http'

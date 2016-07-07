@@ -43,4 +43,16 @@ describe('CloudinaryLite', () => {
     expect(demoImgNode.getAttribute('src')).toEqual('https://res.cloudinary.com/demo/image/upload/w_300,h_200,c_crop,c_scale/sample.jpg');
   });
 
+  it('render cloudinary url, with video resource type auto detected from src  ', () => {
+    // Render a checkbox with label in the document
+    const demoImg = TestUtils.renderIntoDocument(
+        <CloudinaryLite cloudName="demo" src="sample.WebM" />
+    );
+
+    const demoImgNode = ReactDOM.findDOMNode(demoImg);
+
+    // verify img src
+    expect(demoImgNode.getAttribute('src')).toEqual('https://res.cloudinary.com/demo/video/upload/sample.WebM');
+  });
+
 });
