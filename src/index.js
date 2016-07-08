@@ -3,6 +3,18 @@ import blacklist from 'blacklist'
 
 export default class CloudinaryLite  extends Component {
   static SUPPORTED_VIDEO_FORMATS = ['mp4', 'webm', 'ogg']
+  static OPTION_ENCODED_DICTIONARY = {
+    'width': 'w',
+    'height': 'h',
+    'crop': 'c',
+    'gravity': 'g',
+    'aspectRatio': 'ar',
+    'radius': 'r',
+    'angle': 'a',
+    'opacity': 'o',
+    'border': 'bo',
+    'background': 'b'
+  }
   /**
    * simple function to create utl string to fetch a resource from cloudinary followoing cloudinary docs
    * @param {object} requiredInfo - required info for fetch resource, it is protocol, cloudName, resourceType, type, publickId
@@ -18,33 +30,24 @@ export default class CloudinaryLite  extends Component {
 
     // add all transfromations in encoded url from (cloudinary docs)
     if (typeof transformations !== 'undefined') {
+      // create an array to store all transformations encoded in url format (cloudinary docs)
       let transformationsEncoded = []
+
       for (let option in transformations) {
-        switch (option) {
-        case 'width':
-          transformationsEncoded.push('w_' + transformations[option])
-          break;
-        case 'height':
-          transformationsEncoded.push('h_' + transformations[option])
-          break;
-        case 'crop':
-          // if is array creates an array with prefix c and concat with final transformations encoded
-          if (Array.isArray(transformations[option])) {
-            let crops = transformations[option]
-            let cropsEncoded = crops.map((crop) => {
-              return 'c_' + crop
-            })
-            transformationsEncoded = transformationsEncoded.concat(cropsEncoded)
-          } else 
-            transformationsEncoded.push('c_' + transformations[option])
-          break;
-        case 'gravity':
-          transformationsEncoded.push('g_' + transformations[option])
-          break;
-        case 'aspectRatio':
-          transformationsEncoded.push('ar_' + transformations[option])
-          break;
-        }
+        // translate option name in format x, for example width == w if not exist you can pass raw option like mOp == mOp
+        let translatedOption = CloudinaryLite.OPTION_ENCODED_DICTIONARY[option] || option
+
+        // If the option is an array, transform in sub array of chained transformations of the same type and concat with
+        // encoded all encoded options, example {crop: ['scale', 'crop']} == c_scale,c_crop
+        if (Array.isArray(transformations[option])) {
+          let chainedOptions = transformations[option]
+          let chainedOptionsEncoded = chainedOptions.map((chainedOption) => {
+            return `${translatedOption}_${chainedOption}`
+          })
+          transformationsEncoded = transformationsEncoded.concat(chainedOptionsEncoded)
+        } else
+          // if not is an array only add encoded option in format mOp_value
+          transformationsEncoded.push(`${translatedOption}_${transformations[option]}`)
       }
       // finalally add new path and transform all transformations in string with commas in each transformation encoded
       finalUrl = finalUrl + '/' + transformationsEncoded.join()
