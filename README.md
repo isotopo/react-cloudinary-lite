@@ -34,7 +34,7 @@ import CloudinaryLite from 'react-cloudinary-lite'
 class MainComponent extends React.Component {
 
   render() {
-    <CloudinaryLite src="myImg.png" />
+    <CloudinaryLite src="myImg.png" transformations={{width: 480, height:800, angle:'h_flip'}}/>
   }
 
 }
@@ -42,7 +42,7 @@ class MainComponent extends React.Component {
 
 it will render:
 ```html
- <img src='http://res.cloudinary.com/myCloudName/image/upload/myImg.png'>
+ <img src='http://res.cloudinary.com/myCloudName/image/upload/w_480,h_800,a_hflip/myImg.png'>
 ```
 
 
