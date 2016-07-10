@@ -19,7 +19,7 @@ export default class CloudinaryLite  extends Component {
    * simple function to create utl string to fetch a resource from cloudinary followoing cloudinary docs
    * @param {object} requiredInfo - required info for fetch resource, it is protocol, cloudName, resourceType, type, publickId
    * @param {object} transformations - optional it can be width, height, crop, gravity and aspectRatio
-   * @returns {string} 
+   * @returns {string}
    */
   createCloudinaryUrl (requiredInfo, transformations, options) {
     let {protocol, cloudName, resourceType, type, publicId} = requiredInfo
@@ -52,12 +52,12 @@ export default class CloudinaryLite  extends Component {
       // finalally add new path and transform all transformations in string with commas in each transformation encoded
       finalUrl = finalUrl + '/' + transformationsEncoded.join()
     }
-      
+
     // add resource public_id and format and version if exist
     finalUrl = finalUrl + '/' + (options.version ? 'v' + options.version + '/' : '') + publicId + (options.format ? '.' + options.format : '')
     return finalUrl
   }
-  
+
   render() {
     let { transformations, publicId, format, src, resourceType, type, version } = this.props;
     const {cloudName = this.context.cloudName } = this.props;
@@ -77,15 +77,15 @@ export default class CloudinaryLite  extends Component {
       let protocol = this.props.secure ? 'https' : 'http'
       // for default (https, context.CloudName, image, upload, props.publicId)
       let requiredCloudinaryUrlInfo = {protocol, cloudName, resourceType, type, publicId}
-      
+
       // optional info to cloudinary url resource
       let options = {version, format}
-      
+
       const url = this.createCloudinaryUrl(requiredCloudinaryUrlInfo, transformations, options)
       const ResourceTag = resourceType == 'image' ? "img" : "video"
-      
+
       return <ResourceTag src={url} {...finalProps} />;
-      
+
     }
 
     return false;
@@ -97,9 +97,9 @@ CloudinaryLite.propTypes = {
   publicId: PropTypes.string,
   resourceType: PropTypes.oneOf(['image', 'raw', 'video']),
   type: PropTypes.oneOf(['upload', 'private', 'authenticated']),
-  version: PropTypes.number, 
+  version: PropTypes.number,
   secure: PropTypes.bool,
-  cloudName: PropTypes.string.isRequired,
+  cloudName: PropTypes.string,
   transformations: PropTypes.shape({
     width: PropTypes.number,
     height: PropTypes.number,
