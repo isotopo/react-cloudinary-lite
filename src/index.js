@@ -50,7 +50,8 @@ export default class CloudinaryLite  extends Component {
           transformationsEncoded.push(`${translatedOption}_${transformations[option]}`)
       }
       // finalally add new path and transform all transformations in string with commas in each transformation encoded
-      finalUrl = finalUrl + '/' + transformationsEncoded.join()
+        finalUrl = finalUrl + '/' + transformationsEncoded.join()
+        
     }
       
     // add resource public_id and format and version if exist
@@ -64,7 +65,7 @@ export default class CloudinaryLite  extends Component {
 
     if ((src || publicId) && resourceType && type  && cloudName) {
       // filter, and clear component props to inherit the others
-      let finalProps = blacklist(this.props, 'transformations', 'secure', 'publicId', 'cloudName', 'resourceType', 'type', 'version', 'format', 'src')
+      let finalProps = blacklist(this.props, 'transformations', 'secure', 'publicId', 'cloudName', 'resourceType', 'type', 'version', 'format', 'src', 'isInBackground', 'component')
 
       // if prop src is defined, extract and override resource public_id and format
       if (src) {
@@ -82,9 +83,21 @@ export default class CloudinaryLite  extends Component {
       let options = {version, format}
       
       const url = this.createCloudinaryUrl(requiredCloudinaryUrlInfo, transformations, options)
-      const ResourceTag = resourceType == 'image' ? "img" : "video"
-      
-      return <ResourceTag src={url} {...finalProps} />;
+
+      if (this.props.component){        
+        if (this.props.isInBackground) {
+          let {style = {}} = this.props
+          finalProps.style = {...style, backgroundImage: `url(${url})`}
+        }
+        else finalProps.src = url
+        
+        const {component: CustomComponent} = this.props
+        return React.cloneElement(CustomComponent, finalProps)
+        
+      } else {
+        const ResourceTag = resourceType == 'image' ? "img" : "video"        
+        return this.props.children ? <ResourceTag src={url} {...finalProps}> this.props.children </ResourceTag> : <ResourceTag src={url} {...finalProps} />;
+      }
       
     }
 
@@ -95,6 +108,8 @@ export default class CloudinaryLite  extends Component {
 CloudinaryLite.propTypes = {
   src: PropTypes.string,
   publicId: PropTypes.string,
+  component: PropTypes.element,
+  isInBackground: PropTypes.bool,
   resourceType: PropTypes.oneOf(['image', 'raw', 'video']),
   type: PropTypes.oneOf(['upload', 'private', 'authenticated']),
   version: PropTypes.number, 
