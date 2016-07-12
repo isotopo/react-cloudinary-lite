@@ -55,4 +55,21 @@ describe('CloudinaryLite', () => {
     expect(demoImgNode.getAttribute('src')).toEqual('https://res.cloudinary.com/demo/video/upload/sample.WebM');
   });
 
+  it('render cloudinary image, with custom component and image as background in style', () => {
+    // Render a checkbox with label in the document
+
+    const customComponent = <span/>
+    const borderInlineStyle = '3px solid blue'
+    const demoImg = TestUtils.renderIntoDocument(
+        <CloudinaryLite isInBackground={true} component={customComponent} cloudName="demo" style={{border: borderInlineStyle}} src="sample.jpg" />
+    );
+
+    const demoImgNode = ReactDOM.findDOMNode(demoImg);
+
+    // verify img src
+    expect(demoImgNode.getAttribute('style')).toContain("background-image: url(https://res.cloudinary.com/demo/image/upload/sample.jpg)");
+    expect(demoImgNode.getAttribute('style')).toContain(`border: ${borderInlineStyle}`);
+    expect(demoImg.tagName).toEqual(customComponent.tagName)
+  });
+
 });
