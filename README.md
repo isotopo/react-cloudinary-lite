@@ -39,10 +39,28 @@ class MainComponent extends React.Component {
 
 }
 ```
-
 it will render:
 ```html
  <img src='http://res.cloudinary.com/myCloudName/image/upload/w_480,h_800,a_hflip/myImg.png'>
+```
+
+
+Or custom use:
+```javascript
+import CloudinaryLite from 'react-cloudinary-lite'
+
+class MainComponent extends React.Component {
+
+  render() {
+    <CloudinaryLite src="myImg.png" isInBackground={true} component={<i/>} transformations={{width: 480, height:800}}/>
+  }
+
+}
+```
+
+it will render:
+```html
+ <i style="background-image: url(http://res.cloudinary.com/myCloudName/image/upload/w_480,h_800,a_hflip/myImg.png)" />
 ```
 
 
