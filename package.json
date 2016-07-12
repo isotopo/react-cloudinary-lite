@@ -1,6 +1,6 @@
 {
   "name": "react-cloudinary-lite",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "description": "A simple and lightweight React component for cloudinary resources",
   "main": "lib/index.js",
   "scripts": {
