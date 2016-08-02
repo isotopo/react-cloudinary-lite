@@ -51,7 +51,7 @@ export default class CloudinaryLite  extends Component {
       }
       // finalally add new path and transform all transformations in string with commas in each transformation encoded
         finalUrl = finalUrl + '/' + transformationsEncoded.join()
-        
+
     }
 
     // add resource public_id and format and version if exist
@@ -69,9 +69,9 @@ export default class CloudinaryLite  extends Component {
 
       // if prop src is defined, extract and override resource public_id and format
       if (src) {
-        let resourceNameAndExtension = src.split('.')
-        publicId = resourceNameAndExtension[0]
-        format = resourceNameAndExtension[1]
+        let lastPointIndex = src.lastIndexOf('.')
+        publicId = src.slice(0, lastPointIndex)
+        format = src.slice(lastPointIndex + 1)
         resourceType = (CloudinaryLite.SUPPORTED_VIDEO_FORMATS.indexOf(format.toLowerCase()) > -1) ? 'video' : 'image'
       }
 
@@ -84,18 +84,18 @@ export default class CloudinaryLite  extends Component {
 
       const url = this.createCloudinaryUrl(requiredCloudinaryUrlInfo, transformations, options)
 
-      if (this.props.component){        
+      if (this.props.component){
         if (this.props.isInBackground) {
           let {style = {}} = this.props
           finalProps.style = {...style, backgroundImage: `url(${url})`}
         }
         else finalProps.src = url
-        
+
         const {component: CustomComponent} = this.props
         return React.cloneElement(CustomComponent, finalProps)
-        
+
       } else {
-        const ResourceTag = resourceType == 'image' ? "img" : "video"        
+        const ResourceTag = resourceType == 'image' ? "img" : "video"
         return this.props.children ? <ResourceTag src={url} {...finalProps}> this.props.children </ResourceTag> : <ResourceTag src={url} {...finalProps} />;
       }
     }

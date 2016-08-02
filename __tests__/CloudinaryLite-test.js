@@ -19,6 +19,18 @@ describe('CloudinaryLite', () => {
     expect(demoImgNode.getAttribute('src')).toEqual('https://res.cloudinary.com/demo/image/upload/sample.jpg');
   });
 
+  it('render cloudinary demo image with basic url given a src prop with points and characters name', () => {
+    // Render a checkbox with label in the document
+    const demoImg = TestUtils.renderIntoDocument(
+        <CloudinaryLite cloudName="demo" src="my-root-folder/item/so-s.t.-range-name-and/too-large-no-sense-words-system-34951666.jpg" />
+    );
+
+    const demoImgNode = ReactDOM.findDOMNode(demoImg);
+
+    // verify img src
+    expect(demoImgNode.getAttribute('src')).toEqual('https://res.cloudinary.com/demo/image/upload/my-root-folder/item/so-s.t.-range-name-and/too-large-no-sense-words-system-34951666.jpg');
+  });
+
   it('render cloudinary demo image with resize and crop url  ', () => {
     // Render a checkbox with label in the document
     const demoImg = TestUtils.renderIntoDocument(
